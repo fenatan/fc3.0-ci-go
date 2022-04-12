@@ -1,6 +1,7 @@
 name: ci-golang-workflow #nome do workflow
 on:
   pull_request:  # define quando o processo de CI vai rodar
+  push: 
     branches:
       - master
 strategy:
