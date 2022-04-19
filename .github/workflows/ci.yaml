@@ -7,18 +7,30 @@ on:
 jobs:
   check-application: # nome do job
     runs-on: ubuntu-latest # onde o job vai rodar
-    strategy:
-      matrix:
-        go: ['1.14', '1.15']
+    # strategy:
+    #   matrix:
+    #     go: ['1.14', '1.15']
     steps: # quais são os passos que vão ser exeutados quando o processo iniciar  
       - uses: actions/checkout@v2 # pega os dados que acabaram de subir e baixa para a máquina do "runs-on"
       - uses: actions/setup-go@v2 # faz o setup do go na máquina
         with:
-          go-version: ${{ matrix.go }}
+          # go-version: ${{ matrix.go }}
+          go-version: 1.15
       - run: go test
       - run: go run math.go 
-      
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-qemu-action@v1
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          tags: fenatan/fc2.0-ci-go:latest
 
 # uses: para rodar actions
 # run: para rodar comandos
